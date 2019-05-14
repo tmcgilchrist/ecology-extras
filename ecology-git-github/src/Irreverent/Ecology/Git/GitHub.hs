@@ -42,7 +42,6 @@ newtype GitHubEcologyError =
   GitHubAPIError G.Error
   deriving (Show)
 
-
 renderGitHubEcologyError :: GitHubEcologyError -> T.Text
 renderGitHubEcologyError (GitHubAPIError e) = T.concat ["Github API Error: ", T.pack . show $ e]
 
@@ -50,11 +49,15 @@ githubAPI
   :: (MonadIO m)
   => G.Auth
   -> Maybe T.Text
-  -> GitPlatformAPI a b G.Auth m GitHubEcologyError
-githubAPI auth org = GitPlatformAPI
+  -> GitPlatformAPI a b m GitHubEcologyError
+githubAPI auth org =
+  let a = case auth of
+        G.OAuth t -> T.pack . show $ t
+        _ -> ""
+  in GitPlatformAPI
   (getGHOrgRepos auth org)
   (createNewGHRepo auth org)
-  auth
+  a
 
 liftGH
   :: (MonadIO m)
