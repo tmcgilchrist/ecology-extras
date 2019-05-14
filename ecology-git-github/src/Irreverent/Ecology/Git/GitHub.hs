@@ -53,7 +53,8 @@ githubAPI
 githubAPI auth org =
   let a = case auth of
         G.OAuth t -> T.pack . show $ t
-        _ -> ""
+        G.BasicAuth _ p -> T.pack . show $ p
+
   in GitPlatformAPI
   (getGHOrgRepos auth org)
   (createNewGHRepo auth org)

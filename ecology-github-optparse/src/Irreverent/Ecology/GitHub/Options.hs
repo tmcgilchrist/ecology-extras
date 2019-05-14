@@ -23,13 +23,14 @@ import Ultra.Options.Applicative (
   , option
   )
 
-import GitHub.Auth (Auth(..))
+import GitHub.Auth (Auth(..), Token(..))
 
 import Preamble
 
 authReader :: T.Text -> Either T.Text Auth
 authReader t = case T.splitOn ":" t of
   [] -> Left t
+  [password] -> pure (OAuth . T.encodeUtf8 $ password)
   username:password -> pure . (BasicAuth `on` T.encodeUtf8) username $ T.intercalate ":" password
 
 githubAuthP :: [(T.Text, T.Text)] -> Parser Auth
