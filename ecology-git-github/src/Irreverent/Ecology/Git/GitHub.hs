@@ -50,10 +50,11 @@ githubAPI
   :: (MonadIO m)
   => G.Auth
   -> Maybe T.Text
-  -> GitPlatformAPI a b m GitHubEcologyError
+  -> GitPlatformAPI a b G.Auth m GitHubEcologyError
 githubAPI auth org = GitPlatformAPI
   (getGHOrgRepos auth org)
   (createNewGHRepo auth org)
+  auth
 
 liftGH
   :: (MonadIO m)
