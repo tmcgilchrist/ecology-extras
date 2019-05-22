@@ -51,14 +51,9 @@ githubAPI
   -> Maybe T.Text
   -> GitPlatformAPI a b m GitHubEcologyError
 githubAPI auth org =
-  let a = case auth of
-        G.OAuth t -> T.pack . show $ t
-        G.BasicAuth _ p -> T.pack . show $ p
-
-  in GitPlatformAPI
+  GitPlatformAPI
   (getGHOrgRepos auth org)
   (createNewGHRepo auth org)
-  a
 
 liftGH
   :: (MonadIO m)
